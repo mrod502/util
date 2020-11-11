@@ -1,6 +1,19 @@
 package util
 
-//exported consts - DO NOT CHANGE VALUES, ONLY ADD ADDITIONAL VALS
+//Table - enum for table prefix
+type Table string
+
+//Tables
 const (
-	IDSep = "$"
+	Sep = "^"
+
+	TblPosition   Table = "00"
+	TblHBTCOrder  Table = "01"
+	TblHBTCTicker Table = "02"
+	TblHBTCSymbol Table = "03"
+	TblHBTCTrade  Table = "04"
+	TblHBTCCandle Table = "05"
+	TblHBTCMDepth Table = "06"
+	TblErrResp    Table = "07"
+	TblMessage    Table = "08"
 )

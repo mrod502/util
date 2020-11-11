@@ -35,5 +35,5 @@ type Fill struct {
 }
 
 func (f Fill) OrderID() string {
-	return strings.Split(f.FillID, string(IDSep))[0]
+	return strings.Split(f.FillID, Sep)[0]
 }
