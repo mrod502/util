@@ -51,7 +51,8 @@ func NewStore() (s *Store) {
 
 // -------------- End Exported --------------- //
 
-func (s Store) getKeys() (out []string) {
+//GetKeys - Get all keys
+func (s Store) GetKeys() (out []string) {
 	s.mux.RLock()
 	defer s.mux.RUnlock()
 	out = make([]string, len(s.vals))
