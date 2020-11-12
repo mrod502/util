@@ -27,7 +27,7 @@ func (s Store) GetValue(k string) interface{} {
 }
 
 //Set a value
-func (s Store) Set(k string, v interface{}, exp int64) {
+func (s Store) Set(k string, v interface{}) {
 	s.mux.Lock()
 	defer s.mux.Unlock()
 	s.vals[k] = v
