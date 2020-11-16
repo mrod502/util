@@ -40,3 +40,9 @@ func (p Position) Type() []byte {
 func Base36(n int64) string {
 	return strconv.FormatInt(n, 36)
 }
+
+//FromBase36 - parses base36
+func FromBase36(s string) (i int64) {
+	i, _ = strconv.ParseInt(s, 36, 64)
+	return
+}
