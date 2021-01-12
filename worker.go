@@ -5,8 +5,8 @@ import (
 	"time"
 )
 
-//QuoteQueue - store and aggregate quotes
-type QuoteQueue struct {
+//Worker - store and aggregate quotes
+type Worker struct {
 	quotes       []Candle
 	strats       *[]TradingStrategy
 	numElements  uint
@@ -18,12 +18,12 @@ type QuoteQueue struct {
 }
 
 //Push - send a quotable to the thing
-func (q *QuoteQueue) Push(qble Quotable) {
+func (q *Worker) Push(qble Quotable) {
 	q.inputChan <- qble
 }
 
 //Push - update the queue
-func (q *QuoteQueue) push(c Candle) {
+func (q *Worker) push(c Candle) {
 
 	q.m.Lock()
 	defer q.m.Unlock()
@@ -39,13 +39,13 @@ func (q *QuoteQueue) push(c Candle) {
 }
 
 //will use this for searching quotes array
-func (q QuoteQueue) search(c Candle) int {
+func (q Worker) search(c Candle) int {
 
 	return -1
 }
 
 //StreamTrades - process
-func (q *QuoteQueue) StreamTrades(out chan TradeSignal) {
+func (q *Worker) StreamTrades(out chan TradeSignal) {
 
 	var candle Candle
 	for {
@@ -55,7 +55,7 @@ func (q *QuoteQueue) StreamTrades(out chan TradeSignal) {
 	}
 }
 
-//NewQuoteQueue - create a quotequeue
-func NewQuoteQueue(strats *[]TradingStrategy, capacity uint) *QuoteQueue {
-	return &QuoteQueue{quotes: make([]Candle, capacity), strats: strats, capacity: capacity, numElements: 0, inputChan: make(chan Quotable, 128)}
+//NewWorker - create a quotequeue
+func NewWorker(strats *[]TradingStrategy, capacity uint) *Worker {
+	return &Worker{quotes: make([]Candle, capacity), strats: strats, capacity: capacity, numElements: 0, inputChan: make(chan Quotable, 128)}
 }

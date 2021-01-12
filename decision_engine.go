@@ -2,7 +2,6 @@ package util
 
 import (
 	"fmt"
-	"math/rand"
 	"sync"
 )
 
@@ -20,11 +19,13 @@ type Thinker interface {
 
 //DecisionEngine - da brain
 type DecisionEngine struct {
-	Workers      []*QuoteQueue
+	Workers      []*Worker
 	router       map[string]int
 	routerLock   *sync.RWMutex
 	strats       *[]TradingStrategy
 	decisionChan chan TradeSignal
+	workerCtr    int
+	numWorkers   int
 	//	otherBrain Thinker
 	//brainConfig ThinkerConfig
 }
@@ -32,14 +33,15 @@ type DecisionEngine struct {
 //NewDecisionEngine - return an initialized DecisionEngine
 func NewDecisionEngine(numWorkers int, strats *[]TradingStrategy, decisionChan chan TradeSignal) *DecisionEngine {
 	var d = &DecisionEngine{
-		Workers:      make([]*QuoteQueue, numWorkers),
+		Workers:      make([]*Worker, numWorkers),
 		router:       make(map[string]int),
 		routerLock:   new(sync.RWMutex),
 		decisionChan: decisionChan,
+		numWorkers:   numWorkers,
 	}
 
 	for i := 0; i < numWorkers; i++ {
-		d.Workers[i] = NewQuoteQueue(d.strats, 60)
+		d.Workers[i] = NewWorker(d.strats, 60)
 		go d.Workers[i].StreamTrades(d.decisionChan)
 	}
 	return d
@@ -49,7 +51,6 @@ func (d *DecisionEngine) assignWorker(symbol string) {
 	if len(d.Workers) == 0 {
 		panic(fmt.Errorf("no workers %+v", d))
 	}
-	ix := rand.Intn(len(d.Workers))
 
 	d.routerLock.Lock()
 	defer d.routerLock.Unlock()
@@ -59,7 +60,8 @@ func (d *DecisionEngine) assignWorker(symbol string) {
 		return
 	}
 
-	d.router[symbol] = ix
+	d.router[symbol] = d.workerCtr
+	d.workerCtr = (d.workerCtr + 1) % d.numWorkers
 
 }
 
@@ -72,6 +74,7 @@ func (d *DecisionEngine) findRoute(c Candle) int {
 	return -1
 }
 
+//RouteQuotes  - route quotes to the workers, which in turn do things with the quotes
 func (d *DecisionEngine) RouteQuotes(ch chan Quotable) {
 
 	for {
