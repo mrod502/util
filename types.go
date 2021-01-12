@@ -8,6 +8,7 @@ import (
 	"github.com/shopspring/decimal"
 )
 
+//Quotable - determines how to convert to a Candle
 type Quotable interface {
 	ToCandle() Candle
 	ddb.Indexer
@@ -37,3 +38,15 @@ type Fill struct {
 func (f Fill) OrderID() string {
 	return strings.Split(f.FillID, Sep)[0]
 }
+
+//Indicator - do we buy, sell, or hold?
+type Indicator byte
+
+//TradeSignal - tell someone what to trade
+type TradeSignal struct {
+	Side   Indicator
+	Symbol string
+}
+
+//CandlePart - OHLC?
+type CandlePart byte

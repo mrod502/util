@@ -17,3 +17,10 @@ const (
 	TblErrResp    Table = "07"
 	TblMessage    Table = "08"
 )
+
+//constants
+const (
+	BUY  Indicator = Indicator('B')
+	SELL Indicator = Indicator('S')
+	HOLD Indicator = Indicator(0)
+)
