@@ -33,6 +33,7 @@ func MajorityVote(strats []TradingStrategy, candles []Candle, p CandlePart) Indi
 	return HOLD
 }
 
+//StreamSignals - route signals
 func StreamSignals(quotes chan Candle, out chan TradeSignal, strats []TradingStrategy, candle CandlePart) {
 
 	//var quotesMap = NewStore()

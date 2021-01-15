@@ -26,6 +26,7 @@ type Candle struct {
 	Symbol string
 }
 
+//Fill - an execution
 type Fill struct {
 	FillID    string
 	Exchange  rune
@@ -35,6 +36,7 @@ type Fill struct {
 	AvgPx     decimal.Decimal
 }
 
+//OrderID - the id of the order
 func (f Fill) OrderID() string {
 	return strings.Split(f.FillID, Sep)[0]
 }

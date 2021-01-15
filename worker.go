@@ -55,7 +55,7 @@ func (q *Worker) StreamTrades(out chan TradeSignal) {
 	}
 }
 
-//NewWorker - create a quotequeue
+//NewWorker - create a worker
 func NewWorker(strats *[]TradingStrategy, capacity uint) *Worker {
 	return &Worker{quotes: make([]Candle, capacity), strats: strats, capacity: capacity, numElements: 0, inputChan: make(chan Quotable, 128)}
 }

@@ -2,6 +2,7 @@ package util
 
 import (
 	"os"
+	"time"
 
 	"github.com/shopspring/decimal"
 )
@@ -125,4 +126,11 @@ func diffPercent(d []decimal.Decimal) (out []decimal.Decimal) {
 	}
 
 	return
+}
+
+//BeginOfDay - return the time midnight day of
+func BeginOfDay() time.Time {
+	y, m, d := time.Now().Date()
+
+	return time.Date(y, m, d, 0, 0, 0, 0, time.Now().Location())
 }
